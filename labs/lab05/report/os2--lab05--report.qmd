@@ -1,67 +1,135 @@
 ---
+# Preamble
+
 ## Author
 author:
-  name: Дмитрий Сергеевич Кулябов
+  name: Гурбанов Сарча
   degrees: DSc
   orcid: 0000-0002-0877-7063
-  email: kulyabov-ds@rudn.ru
+  email: 1032244850@rudn.ru
   affiliation:
     - name: Российский университет дружбы народов
       country: Российская Федерация
       postal-code: 117198
       city: Москва
       address: ул. Миклухо-Маклая, д. 6
-
 ## Title
-title: "Шаблон отчёта по лабораторной работе"
-subtitle: "Простейший вариант"
+title: "Лабораторная работа № 5"
+subtitle: "Управление системными службами"
 license: "CC BY"
+## Generic options
+lang: ru-RU
+number-sections: true
+toc: true
+toc-title: "Содержание"
+toc-depth: 2
+## Crossref customization
+crossref:
+  lof-title: "Список иллюстраций"
+  lot-title: "Список таблиц"
+  lol-title: "Листинги"
+## Bibliography
+bibliography:
+  - bib/cite.bib
+csl: _resources/csl/gost-r-7-0-5-2008-numeric.csl
+## Formats
+format:
+  ### Pdf output format
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: false
+    toc-depth: 2
+    lof: true # List of figures
+    lot: true # List of tables
+    #### Document
+    documentclass: scrreprt
+    papersize: a4
+    fontsize: 12pt
+    linestretch: 1.5
+    #### Language
+    babel-lang: russian
+    babel-otherlangs: english
+    #### Biblatex
+    cite-method: biblatex
+    biblio-style: numeric
+    biblatexoptions:
+      - backend=biber
+      - langhook=extras
+      - autolang=other*
+    #### Misc options
+    csquotes: true
+    indent: true
+    header-includes: |
+      \usepackage{indentfirst}
+      \usepackage{float}
+      \floatplacement{figure}{H}
+      \usepackage{lmodern}
+  ### Docx output format
+  docx:
+    toc: true
+    number-sections: true
+    toc-depth: 2
 ---
 
-# Цель работы
+# Информация
 
-Здесь приводится формулировка цели лабораторной работы.
-Формулировки цели для каждой лабораторной работы приведены в методических указаниях.
+## Докладчик
 
-Цель данного шаблона --- максимально упростить подготовку отчётов по лабораторным работам.
-Модифицируя данный шаблон, студенты смогут без труда подготовить отчёт по лабораторным работам, а также познакомиться с основными возможностями разметки Markdown.
+  * Гурбанов Сарча
+  * студент 
+  * Российский университет дружбы народов им. П. Лумумбы
+  * [1032244850@rudn.ru](mailto:032244850@rudn.ru)
+  * <https://gurbanovs.github.io/ru/>
 
-# Задание
+## Цель работы
 
-Здесь приводится описание задания в соответствии с рекомендациями методического пособия и выданным вариантом.
+Получить навыки упраления системными службами операционной системы посредством systemd
 
-# Теоретическое введение
+# Выполнение  лабораторной работы
 
-Здесь описываются теоретические аспекты, связанные с выполнением работы.
+## Открываем терминал от имени root и проверяем статус службы vsftpd(Very Secure FTP) устанавливаем ее с помощью команды `systemctl status` и после сообщения что данной службы нет устанавливаем ее с помощью команды `dnf -y install`
+![](image/1.png)
 
-Например, в [табл. @tbl-std-dir] приведено краткое описание стандартных каталогов Unix.
+## Запускаем службу Very Secure FTP с помощью команды `systemctl enable`
+![](image/2.png)
 
-| Имя каталога | Описание каталога                                                                                                          |
-|--------------|----------------------------------------------------------------------------------------------------------------------------|
-| `/`          | Корневая директория, содержащая всю файловую                                                                               |
-| `/bin `      | Основные системные утилиты, необходимые как в однопользовательском режиме, так и при обычной работе всем пользователям     |
-| `/etc`       | Общесистемные конфигурационные файлы и файлы конфигурации установленных программ                                           |
-| `/home`      | Содержит домашние директории пользователей, которые, в свою очередь, содержат персональные настройки и данные пользователя |
-| `/media`     | Точки монтирования для сменных носителей                                                                                   |
-| `/root`      | Домашняя директория пользователя  `root`                                                                                   |
-| `/tmp`       | Временные файлы                                                                                                            |
-| `/usr`       | Вторичная иерархия для данных пользователя                                                                                 |
+## Проверяем статус службы Very Secure FTP с помощью команды `systemctl status`
+![](image/3.png)
 
-: Описание некоторых каталогов файловой системы GNU Linux {#tbl-std-dir}
+## Проверяем статус службы Very Secure FTP с помощью команды `systemctl status` после ввода команды `systemctl start vsftpd` 
+![](image/4.png)
 
-Более подробно про Unix см. в [@tanenbaum_book_modern-os_ru; @robbins_book_bash_en; @zarrelli_book_mastering-bash_en; @newham_book_learning-bash_en].
+## Выводим на экран список зависимостей юнита с помощью команды `systemctl list-dependencies vsftpd`
+![](image/5.png)
 
-# Выполнение лабораторной работы
+## Выводим на экран список зависимостей юнитов  от юнита vsftpd с помощью команды `systemctl list-dependencies vsftpd --reverse` 
+![](image/6.png)
 
-Описываются проведённые действия, в качестве иллюстрации даётся ссылка на иллюстрацию ([рис. @fig-001]).
+## Устанавливаем все пакеты которые имеют в названии `iptables`
+![](image/7.png)
 
-![V Сольвеевский конгресс (1927) «Электроны и фотоны»](image/solvay.jpg){#fig-001 width=70%}
+## Смотрим статус firewald
+![](image/8.png)
 
-# Выводы
+## Смотрим статус iptables, активируем его и снова смотрим его статус
+![](image/9.png)
 
-Здесь кратко описываются итоги проделанной работы.
+## Показываем все активные и не активные цели system с помощью команды `systemctl --type=target -- all`  
+![](image/10.png)
 
-# Список литературы{.unnumbered}
+## Переходим в каталог и смотрим все цели которые мы можем изолировать с помощью команды `grep Isolate *.target`
+![](image/11.png)
 
-::: {#refs}
-:::
+## Переходим на режим администратора и выводим на экран цель установленную по умолчанию с помощью команды `systemctl get-default`. Меняем цель по умолчанию на multi-user.target с помощью команды `systemctl set-default multi-user.target` 
+![](image/12.png)
+
+## Перезагружаем систему с помощью команды `reboot`
+![](image/13.png)
+
+## Мы можем увидеть что система загрузилась в текстовом режиме. Получаем полномочия администратора и с помощью команды `systemctl set-default graphical.target` ставим по умолчанию графический режим
+![](image/14.png)
+
+## Вывод
+
+Я получил навыки управления системными службамии операционной системы посредством systemd
